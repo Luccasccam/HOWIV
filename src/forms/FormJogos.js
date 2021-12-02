@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { MDBInput } from "mdbreact";
 import { MDBBtn } from "mdbreact";
@@ -10,6 +10,10 @@ function FormJogos () {
     const [quantidade, setQuantidade] = useState();
     const [valor, setValor] = useState();
     const [listaJogos, setListaJogos] = useState([]);
+
+    useEffect(() => {
+        listarJogos();
+    }, [])
 
     async function handleSubmit () {
         if(id == null) {
@@ -37,21 +41,7 @@ function FormJogos () {
 
         limparInputs();
     }
-
-    function handleInputs(event) {
-        if(event.target.name === "nome") 
-        setNome(event.target.value);
-
-        if(event.target.name === "categoria")
-        setCategoria(event.target.value);
-
-        if(event.target.name === "quantidade")
-        setQuantidade(event.target.value);
-
-        if(event.target.name === "valor")
-        setValor(event.target.value);
-    }
-
+    
     async function listarJogos() {
         const response = await axios.get('http://localhost:56391/api/Jogo/ListarJogos');
         let data = response.data;
@@ -89,8 +79,7 @@ function FormJogos () {
     return(
         <div>
             <div>
-                <button onClick={listarJogos}>LISTAR</button>
-                <form /* EVENTO QUE EDITA USUÁRIAROS   */
+                <form
                     onSubmit={event => {    
                         event.preventDefault();
                         event.stopPropagation();
@@ -99,10 +88,10 @@ function FormJogos () {
                     }}
                 >
                     <MDBInput disabled label="Id" type="text" name="id" id="id" value= {id} />
-                    <MDBInput label="Nome" type="text" name="nome" id="nome" value= {nome} onChange= {handleInputs} />
-                    <MDBInput label="Categoria do Jogo" type="text" name="categoria" id="categoria" value= {categoria} onChange= {handleInputs} />
-                    <MDBInput label="Quantidade Disponível" type="number" name="quantidade" id="quantidade" value= {quantidade} onChange={handleInputs} />
-                    <MDBInput label="Valor" type="number" name="valor" value= {valor} id="valor" onChange={handleInputs} />
+                    <MDBInput label="Nome" type="text" name="nome" id="nome" value= {nome} onChange={(e) => setNome(e.target.value)} />
+                    <MDBInput label="Categoria do Jogo" type="text" name="categoria" id="categoria" value= {categoria} onChange={(e) => setCategoria(e.target.value)} />
+                    <MDBInput label="Quantidade Disponível" type="number" name="quantidade" id="quantidade" value= {quantidade} onChange={(e) =>  setQuantidade(e.target.value)} />
+                    <MDBInput label="Valor" type="number" name="valor" value= {valor} id="valor" onChange={(e) =>  setValor(e.target.value)} />
                     <MDBBtn type= "submit" color="success" className="button muted-button">Continuar</MDBBtn>
                 </form>
             </div>
@@ -121,13 +110,13 @@ function FormJogos () {
                     </thead>
                     <tbody>
                         {
-                            listaJogos.map((jogo) =>(  /* cria map para varrer o array o user */
-                                <tr key={jogo.id}> {/* key é a definição de onde vai se atribuir as informações nesse caso id de user */}
-                                    <td>{jogo.id}</td> {/* nome é atributo do array */}
-                                    <td>{jogo.nome}</td> {/* nome é atributo do array */}
-                                    <td>{jogo.categoria}</td>{/* atributo do array */}
-                                    <td>{jogo.quantidade}</td>{/* atributo do array */}
-                                    <td>{jogo.valor}</td>{/* atributo do array */}
+                            listaJogos.map((jogo) => (
+                                <tr key={jogo.id}>
+                                    <td>{jogo.id}</td>
+                                    <td>{jogo.nome}</td>
+                                    <td>{jogo.categoria}</td>
+                                    <td>{jogo.quantidade}</td>
+                                    <td>{jogo.valor}</td>
                                     <td>
                                         <MDBBtn color="warning" size ="sm"
                                                 className="button muted-button"
