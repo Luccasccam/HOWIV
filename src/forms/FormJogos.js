@@ -50,21 +50,22 @@ function FormJogos () {
         setListaJogos(data)
     }
 
+    
+    async function handleDelete(id) {
+        console.log(id)
+        const response = await axios.delete(`http://localhost:56391/api/Jogo/DeletarJogo/${id}`);
+        let status = response.status;
+        console.log(status);
+        
+        listarJogos();
+    }
+
     function handleUpdate(jogo) {
         setId(jogo.id)
         setNome(jogo.nome)
         setCategoria(jogo.categoria)
         setQuantidade(jogo.quantidade)
         setValor(jogo.valor)
-    }
-
-    async function handleDelete(id) {
-        console.log(id)
-        const response = await axios.delete(`http://localhost:56391/api/Jogo/DeletarJogo/${8}`);
-        let status = response.status;
-        console.log(status);
-    
-        listarJogos();
     }
 
     function limparInputs() {
